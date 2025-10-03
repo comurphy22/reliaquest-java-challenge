@@ -1,4 +1,4 @@
-package com.challenge.api.model;
+package com.challenge.api.application.domain.model;
 
 import java.time.Instant;
 import java.util.UUID;
