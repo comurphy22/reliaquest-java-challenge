@@ -1,26 +1,31 @@
 package com.challenge.api.application.domain.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.Instant;
 import java.util.UUID;
+import lombok.*;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeImpl implements Employee{
-    private UUID uuid;
-    private String firstName;
-    private String lastName;
-    private String fullName;
-    private Integer salary;
-    private Integer age;
-    private String jobTitle;
-    private String email;
-    private Instant contractHireDate;
+public class EmployeeImpl implements Employee {
+    @NonNull private UUID uuid;
+
+    @NonNull private String firstName;
+
+    @NonNull private String lastName;
+
+    @NonNull private String fullName;
+
+    @NonNull private Integer salary;
+
+    @NonNull private Integer age;
+
+    @NonNull private String jobTitle;
+
+    @NonNull private String email;
+
+    @NonNull private Instant contractHireDate;
+
     private Instant contractTerminationDate;
 }

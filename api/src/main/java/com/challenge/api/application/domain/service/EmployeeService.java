@@ -5,42 +5,44 @@ import com.challenge.api.application.domain.model.EmployeeImpl;
 import com.challenge.api.application.port.CreateEmployeeUseCase;
 import com.challenge.api.application.port.GetAllEmployeesUseCase;
 import com.challenge.api.application.port.GetEmployeeByUuidUseCase;
-import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import org.springframework.stereotype.Service;
 
 @Service
 public class EmployeeService implements GetAllEmployeesUseCase, GetEmployeeByUuidUseCase, CreateEmployeeUseCase {
     private final Map<UUID, Employee> employeeStorage = new ConcurrentHashMap<>();
 
-    public EmployeeService(){
+    public EmployeeService() {
         initializeMockData();
     }
 
     @Override
-    public List<Employee> getAllEmployees(){
+    public List<Employee> getAllEmployees() {
         return new ArrayList<>(employeeStorage.values());
     }
 
     @Override
-    public Employee getEmployeeByUuid(UUID uuid){
+    public Employee getEmployeeByUuid(UUID uuid) {
         return employeeStorage.get(uuid);
     }
 
     @Override
-    public Employee createEmployee(String firstName, String lastName, String email,
-                                   Integer salary, Integer age, String jobTitle,
-                                   Instant contractHireDate) {
-        // Generate UUID and set hire date if not provided
+    public Employee createEmployee(
+            String firstName,
+            String lastName,
+            String email,
+            Integer salary,
+            Integer age,
+            String jobTitle,
+            Instant contractHireDate) {
         UUID uuid = UUID.randomUUID();
         Instant hireDate = contractHireDate != null ? contractHireDate : Instant.now();
 
-        // Build the employee
         Employee employee = EmployeeImpl.builder()
                 .uuid(uuid)
                 .firstName(firstName)
@@ -53,7 +55,6 @@ public class EmployeeService implements GetAllEmployeesUseCase, GetEmployeeByUui
                 .fullName(firstName + " " + lastName) // Optional: set full name
                 .build();
 
-        // Store the employee
         employeeStorage.put(uuid, employee);
 
         return employee;
@@ -64,6 +65,7 @@ public class EmployeeService implements GetAllEmployeesUseCase, GetEmployeeByUui
                 .uuid(UUID.randomUUID())
                 .firstName("John")
                 .lastName("Doe")
+                .fullName("John Doe")
                 .email("john.doe@company.com")
                 .salary(75000)
                 .age(30)
@@ -75,6 +77,7 @@ public class EmployeeService implements GetAllEmployeesUseCase, GetEmployeeByUui
                 .uuid(UUID.randomUUID())
                 .firstName("Jane")
                 .lastName("Smith")
+                .fullName("Jane Smith")
                 .email("jane.smith@company.com")
                 .salary(95000)
                 .age(35)
@@ -86,6 +89,7 @@ public class EmployeeService implements GetAllEmployeesUseCase, GetEmployeeByUui
                 .uuid(UUID.randomUUID())
                 .firstName("Bob")
                 .lastName("Johnson")
+                .fullName("Bob Johnson")
                 .email("bob.johnson@company.com")
                 .salary(120000)
                 .age(40)
