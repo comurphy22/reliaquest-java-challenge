@@ -1,9 +1,11 @@
 package com.challenge.api.adapter.in.web;
 
+import com.challenge.api.adapter.in.web.dto.CreateEmployeeDto;
 import com.challenge.api.application.domain.model.Employee;
 import java.util.List;
 import java.util.UUID;
 
+import com.challenge.api.application.port.CreateEmployeeUseCase;
 import com.challenge.api.application.port.GetAllEmployeesUseCase;
 import com.challenge.api.application.port.GetEmployeeByUuidUseCase;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 public class EmployeeController {
     private final GetAllEmployeesUseCase getAllEmployeesUseCase;
     private final GetEmployeeByUuidUseCase getEmployeeByUuidUseCase;
-
+    private final CreateEmployeeUseCase createEmployeeUseCase;
 
     /**
      * @implNote Need not be concerned with an actual persistence layer. Generate mock Employee models as necessary.
@@ -47,7 +49,16 @@ public class EmployeeController {
      * @return Newly created Employee
      */
     @PostMapping()
-    public Employee createEmployee(Object requestBody) {
-        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Employee createEmployee(@RequestBody CreateEmployeeDto employeeDto) {
+        return createEmployeeUseCase.createEmployee(
+                employeeDto.getFirstName(),
+                employeeDto.getLastName(),
+                employeeDto.getEmail(),
+                employeeDto.getSalary(),
+                employeeDto.getAge(),
+                employeeDto.getJobTitle(),
+                employeeDto.getContractHireDate()
+        );
     }
 }

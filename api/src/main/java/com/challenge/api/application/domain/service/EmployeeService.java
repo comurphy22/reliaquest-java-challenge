@@ -15,9 +15,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
-public class EmployeeService implements
-        GetAllEmployeesUseCase, GetEmployeeByUuidUseCase
-{
+public class EmployeeService implements GetAllEmployeesUseCase, GetEmployeeByUuidUseCase, CreateEmployeeUseCase {
     private final Map<UUID, Employee> employeeStorage = new ConcurrentHashMap<>();
 
     public EmployeeService(){
@@ -32,6 +30,33 @@ public class EmployeeService implements
     @Override
     public Employee getEmployeeByUuid(UUID uuid){
         return employeeStorage.get(uuid);
+    }
+
+    @Override
+    public Employee createEmployee(String firstName, String lastName, String email,
+                                   Integer salary, Integer age, String jobTitle,
+                                   Instant contractHireDate) {
+        // Generate UUID and set hire date if not provided
+        UUID uuid = UUID.randomUUID();
+        Instant hireDate = contractHireDate != null ? contractHireDate : Instant.now();
+
+        // Build the employee
+        Employee employee = EmployeeImpl.builder()
+                .uuid(uuid)
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .salary(salary)
+                .age(age)
+                .jobTitle(jobTitle)
+                .contractHireDate(hireDate)
+                .fullName(firstName + " " + lastName) // Optional: set full name
+                .build();
+
+        // Store the employee
+        employeeStorage.put(uuid, employee);
+
+        return employee;
     }
 
     private void initializeMockData() {
